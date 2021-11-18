@@ -6,8 +6,8 @@ EOF
 
 echo "Set Google DNS\n"
 cat << EOF > /etc/resolv.conf
-8.8.8.8
-8.8.4.4
+nameserver 8.8.8.8
+nameserver 8.8.4.4
 EOF
 
 echo "Update & Full-Upgrade\n"
@@ -53,16 +53,16 @@ read -r SYSTEMD_NAME
 echo "The systemd file will be in /etc/systemd/system/$SYSTEMD_NAME.service:\n"
 
 echo "Please insert ssh tunnel -R PORT on remote host, eg 6666:\n"
-read -r RSSHPORT
+read -r REMOTESSHPORT
 
 cat << EOF > /etc/systemd/system/$SYSTEMD_NAME.service
 [Unit]
-Description=AutoSSH tunnel service nyekeng-baru on remote port $SSHPORT
+Description=AutoSSH tunnel service nyekeng-baru on remote port $REMOTESSHPORT
 After=network.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -N -i $KEYLOCATION -R $RSSHPORT:localhost:$SSHPORT $USER@$TARGETIP
+ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -N -i $KEYLOCATION -R $REMOTESSHPORT:localhost:$SSHPORT $USER@$TARGETIP
 
 [Install]
 WantedBy=multi-user.target
