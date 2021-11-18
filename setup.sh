@@ -100,6 +100,8 @@ WantedBy=multi-user.target
 #After=network-online.target - only attempts to run if its connected to a network (important for wifi-connected devices).
 #ServerAliveInterval - this tells SSH to test the connection every 30 seconds
 #ServerAliveCountMax - assume failure after 3 consecutive failed messages. Such configuration ensures a quick recovery after the connection failure.
+# -M 0 --> no monitoring
+# -N Just open the connection and do nothing (not interactive)
 EOF
 
 echo -e "Reload daemon & start $SYSTEMD_NAME.service:\n"
