@@ -45,6 +45,7 @@ hostnamectl set-hostname $CHG_HOSTNAME
 
 echo -e "Setting up ssh-keygen to remote host for user root\n"
 sudo -u root bash -c "ssh-keygen -f ~root/.ssh/id_rsa -N ''"
+chmod 600 /root/.ssh/id_rsa.pub
 
 echo -e "Please insert the password used for ssh login on remote machine, eg P@ssw0rd:\n"
 read -r USERPASS
