@@ -34,6 +34,10 @@ fi
 echo -e "Install Tools\n"
 apt-get install -y openssh-server responder macchanger voiphopper snmpcheck onesixtyone patator isr-evilgrade screen crackmapexec xrdp autossh sshpass
 
+echo -e "Enable SSH\n"
+systemctl start ssh
+systemctl enable ssh
+
 echo -e "Enable RDP\n"
 service xrdp-sesman start
 systemctl enable xrdp
