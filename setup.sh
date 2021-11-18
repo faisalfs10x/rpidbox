@@ -89,7 +89,6 @@ After=network-online.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-#ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -p $SSHPORT -i /root/.ssh/id_rsa
 ExecStart=/usr/bin/autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -p $SSHPORT -i /root/.ssh/id_rsa
 Restart=always
 RestartSec=5s
