@@ -54,14 +54,15 @@ sudo -u root bash -c "ssh-keygen -f ~root/.ssh/id_rsa -N ''"
 chmod 600 /root/.ssh/id_rsa.pub
 
 echo -e "Setting up ssh-copy-id to remote host\n"
+
+echo -e "Please insert username remote host, eg root:\n"
+read -r USER
+
 echo -e "Please insert the password used for ssh login on remote machine, eg P@ssw0rd:\n"
 read -r USERPASS
 
 echo -e "Please insert the location of id_rsa.pub file, eg /root/.ssh/id_rsa.pub :\n"
 read -r KEYLOCATION
-
-echo -e "Please insert username remote host, eg root:\n"
-read -r USER
 
 echo -e "Please insert IP of remote host, eg 128.78.6.45:\n"
 read -r TARGETIP
@@ -70,7 +71,7 @@ echo -e "Please insert ssh PORT of remote host, eg 22:\n"
 read -r SSHPORT
 
 echo -e "Copying $KEYLOCATION to $USER@$TARGETIP on $SSHPORT:\n"
-echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP"
+echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP" -p $SSHPORT
 
 echo -e "Setting up systemd service as $SYSTEMD_NAME.service:"
 echo -e "Please insert systemd file name, eg tunnel or revtunnel:\n"
@@ -83,13 +84,12 @@ read -r REMOTESSHPORT
 cat << EOF > /etc/systemd/system/$SYSTEMD_NAME.service
 [Unit]
 Description=AutoSSH tunnel service nyekeng-baru on remote port $REMOTESSHPORT
-After=network.target network-online.target sshd.service
-#After=network-online.target
+#After=network.target network-online.target sshd.service
+After=network-online.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-#ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -o ExitOnForwardFailure=yes -N -i $KEYLOCATION -R $REMOTESSHPORT:localhost:$SSHPORT $USER@$TARGETIP
-ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -i /root/.ssh/id_rsa
+ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -p $SSHPORT -i /root/.ssh/id_rsa
 Restart=always
 RestartSec=5s
 
@@ -97,6 +97,7 @@ RestartSec=5s
 WantedBy=multi-user.target
 
 #After=network.target - after network is up
+#After=network-online.target - only attempts to run if its connected to a network (important for wifi-connected devices).
 #ServerAliveInterval - this tells SSH to test the connection every 30 seconds
 #ServerAliveCountMax - assume failure after 3 consecutive failed messages. Such configuration ensures a quick recovery after the connection failure.
 EOF
