@@ -1,4 +1,4 @@
-/bin/bash
+#!/bin/bash
 
 echo -e "Update kali repo\n"
 cat << EOF > /etc/apt/sources.list
