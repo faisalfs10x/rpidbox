@@ -1,14 +1,22 @@
-echo "Update kali repo\n"
+echo -e "Update kali repo\n"
 cat << EOF > /etc/apt/sources.list
 deb http://http.kali.org/kali kali-rolling main non-free contrib
 deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 EOF
 
-echo "Set Google DNS\n"
+echo -e "Set Google DNS\n"
 cat << EOF > /etc/resolv.conf
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
+
+echo -e "Reduce power save level\n"
+cat << EOF > /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+wifi.powersave = 2
+EOF
+
+echo -e "Restarting NetworkManager\n"
+systemctl restart NetworkManager
 
 echo -e "Apt Update\n"
 apt update -y
@@ -66,11 +74,15 @@ read -r REMOTESSHPORT
 cat << EOF > /etc/systemd/system/$SYSTEMD_NAME.service
 [Unit]
 Description=AutoSSH tunnel service nyekeng-baru on remote port $REMOTESSHPORT
-After=network.target
+After=network.target network-online.target sshd.service
+#After=network-online.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -N -i $KEYLOCATION -R $REMOTESSHPORT:localhost:$SSHPORT $USER@$TARGETIP
+#ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -o ExitOnForwardFailure=yes -N -i $KEYLOCATION -R $REMOTESSHPORT:localhost:$SSHPORT $USER@$TARGETIP
+ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -i $KEYLOCATION
+Restart=always
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
