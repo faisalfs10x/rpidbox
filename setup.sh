@@ -47,6 +47,7 @@ echo -e "Setting up ssh-keygen to remote host for user root\n"
 sudo -u root bash -c "ssh-keygen -f ~root/.ssh/id_rsa -N ''"
 chmod 600 /root/.ssh/id_rsa.pub
 
+echo -e "Setting up ssh-copy-id to remote host\n"
 echo -e "Please insert the password used for ssh login on remote machine, eg P@ssw0rd:\n"
 read -r USERPASS
 
@@ -62,6 +63,7 @@ read -r TARGETIP
 echo -e "Please insert ssh PORT of remote host, eg 22:\n"
 read -r SSHPORT
 
+echo -e "Copying $KEYLOCATION to $USER@$TARGETIP on $SSHPORT:\n"
 echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP"
 
 echo -e "Setting up systemd service as $SYSTEMD_NAME.service:"
@@ -81,7 +83,7 @@ After=network.target network-online.target sshd.service
 [Service]
 Environment="AUTOSSH_GATETIME=0"
 #ExecStart=/usr/bin/autossh -M 11166 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -o ExitOnForwardFailure=yes -N -i $KEYLOCATION -R $REMOTESSHPORT:localhost:$SSHPORT $USER@$TARGETIP
-ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -i $KEYLOCATION
+ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $USER@$TARGETIP -i /root/.ssh/id_rsa
 Restart=always
 RestartSec=5s
 
