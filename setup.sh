@@ -12,10 +12,10 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
 
-echo -e "Reduce power save level\n"
-cat << EOF > /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
-wifi.powersave = 2
-EOF
+#echo -e "Reduce power save level\n"
+#cat << EOF > /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+#wifi.powersave = 2
+#EOF
 
 echo -e "Restarting NetworkManager\n"
 systemctl restart NetworkManager
