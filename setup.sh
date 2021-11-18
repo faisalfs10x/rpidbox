@@ -1,3 +1,5 @@
+/bin/bash
+
 echo -e "Update kali repo\n"
 cat << EOF > /etc/apt/sources.list
 deb http://http.kali.org/kali kali-rolling main non-free contrib
