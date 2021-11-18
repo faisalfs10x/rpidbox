@@ -24,7 +24,7 @@ echo -e "Apt Update\n"
 apt update -y
 
 echo -e "Are you want to perform Full-Upgrade, it may take looooong time!!"
-read -p "Are you sure? really sure? pls type N for NO" -n 1 -r
+read -p "Are you sure? really sure? pls type N for NO: " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -71,7 +71,7 @@ echo -e "Please insert ssh PORT of remote host, eg 22:\n"
 read -r SSHPORT
 
 echo -e "Copying $KEYLOCATION to $USER@$TARGETIP on $SSHPORT:\n"
-echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP" -p $SSHPORT
+echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP" -p "$SSHPORT"
 
 echo -e "Setting up systemd service as $SYSTEMD_NAME.service:"
 echo -e "Please insert systemd file name, eg tunnel or revtunnel:\n"
