@@ -55,7 +55,7 @@ read -r SSHPORT
 
 echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION "$USER"@"$TARGETIP"
 
-echo -e "Setting up systemd service as autossh-ptunnel.service:"
+echo -e "Setting up systemd service as $SYSTEMD_NAME.service:"
 echo -e "Please insert systemd file name, eg tunnel or revtunnel:\n"
 read -r SYSTEMD_NAME
 echo -e "The systemd file will be in /etc/systemd/system/$SYSTEMD_NAME.service:\n"
