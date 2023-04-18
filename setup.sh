@@ -71,7 +71,7 @@ echo -e "Please insert ssh PORT of remote host, eg 22:\n"
 read -r SSHPORT
 
 echo -e "Copying $KEYLOCATION to $USER@$TARGETIP on $SSHPORT:\n"
-echo "$USERPASS" | sshpass ssh-copy-id -f -i $KEYLOCATION -p $SSHPORT $USER@$TARGETIP
+echo '$USERPASS' | sshpass ssh-copy-id -f -i $KEYLOCATION -p $SSHPORT $USER@$TARGETIP
 
 echo -e "Setting up systemd service as $SYSTEMD_NAME.service:"
 echo -e "Please insert systemd file name, eg tunnel or revtunnel:\n"
