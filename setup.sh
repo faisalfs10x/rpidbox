@@ -46,7 +46,7 @@ then
 fi
 
 echo -e "\n[+] Installing Tools\n"
-apt-get install -y openssh-server responder macchanger voiphopper snmpcheck onesixtyone patator isr-evilgrade screen crackmapexec xrdp autossh sshpass
+apt-get install -y openssh-server responder macchanger voiphopper snmpcheck onesixtyone patator isr-evilgrade screen netexec xrdp autossh sshpass
 
 sleep 2
 
