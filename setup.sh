@@ -13,9 +13,15 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo -e "\n[+] Update kali repo\n"
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
 cat << EOF > /etc/apt/sources.list
-deb http://http.kali.org/kali kali-rolling main non-free contrib
-deb-src http://http.kali.org/kali kali-rolling main non-free contrib
+# See https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
+deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+
+# Additional line for source packages
+# deb-src http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+#deb http://http.kali.org/kali kali-rolling main non-free contrib
+#deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 EOF
 
 echo -e "[+] Set Google DNS\n"
