@@ -167,7 +167,7 @@ After=network-online.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-ExecStart=/usr/bin/autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $RUSER@$TARGETIP -p $SSHPORT -i $SSH_PRIVKEY
+ExecStart=/usr/bin/autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -NR $REMOTESSHPORT:127.0.0.1:$SSHPORT $RUSER@$TARGETIP -p $SSHPORT -i $SSH_PRIVKEY
 Restart=always
 RestartSec=5s
 
